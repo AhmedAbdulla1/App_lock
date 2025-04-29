@@ -1,6 +1,6 @@
+import 'package:app_lock_flutter/screens/home.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:app_lock_flutter/screens/home.dart';
 
 class SplashPage extends StatefulWidget {
   const SplashPage({Key? key}) : super(key: key);
@@ -45,8 +45,8 @@ class _SplashPageState extends State<SplashPage> {
               "AppLock".toUpperCase(),
               style: GoogleFonts.ubuntu(
                 textStyle: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 12,
+                  color: Colors.black,
+                  fontSize: 18,
                   letterSpacing: 5,
                   fontWeight: FontWeight.w300,
                 ),

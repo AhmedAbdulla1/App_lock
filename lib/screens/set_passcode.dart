@@ -1,6 +1,6 @@
 import 'package:app_lock_flutter/executables/controllers/password_controller.dart';
-import 'package:flutter/material.dart';
 import 'package:app_lock_flutter/services/constant.dart';
+import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 
@@ -21,10 +21,11 @@ class _SetPasscodeState extends State<SetPasscode> {
   @override
   Widget build(BuildContext context) {
     var size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
     return WillPopScope(
-      onWillPop: () async {
-        return false;
-      },
+      onWillPop: () async => false,
       child: Scaffold(
         bottomNavigationBar: SizedBox(
           height: 60,
@@ -34,12 +35,10 @@ class _SetPasscodeState extends State<SetPasscode> {
             child: Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Theme.of(context).primaryColorDark,
-                ),
+                border: Border.all(color: colorScheme.primary),
               ),
               child: MaterialButton(
-                color: Colors.transparent,
+                color: colorScheme.primary,
                 elevation: 0,
                 onPressed: () {
                   Get.find<PasswordController>().savePasscode();
@@ -47,8 +46,8 @@ class _SetPasscodeState extends State<SetPasscode> {
                 child: GetBuilder<PasswordController>(
                   builder: (state) {
                     return Text(
-                      state.isConfirm ? "Set Passcode" : "Save Passcode",
-                      style: MyFont().subtitle(),
+                      state.isConfirm ? "Confirm Passcode" : "Save Passcode",
+                      style: MyFont().subtitle(color: colorScheme.onPrimary),
                     );
                   },
                 ),
@@ -58,20 +57,17 @@ class _SetPasscodeState extends State<SetPasscode> {
         ),
         appBar: AppBar(
           centerTitle: true,
-          iconTheme: const IconThemeData(
-            color: Colors.white,
-          ),
+          backgroundColor: theme.scaffoldBackgroundColor,
+          elevation: 0,
           leading: IconButton(
-            icon: const Icon(
-              Icons.keyboard_arrow_left,
-              color: Colors.white,
-            ),
-            onPressed: () {
-              Navigator.pop(context);
-            },
+            icon: Icon(Icons.arrow_back_ios, color: colorScheme.onBackground),
+            onPressed: () => Navigator.pop(context),
           ),
           title: Text(
             "Set Passcode",
+            style: theme.textTheme.titleMedium?.copyWith(
+              color: colorScheme.onBackground,
+            ),
           ),
         ),
         body: SizedBox(
@@ -82,10 +78,8 @@ class _SetPasscodeState extends State<SetPasscode> {
             children: [
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8.0,
-                    vertical: 10,
-                  ),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8.0, vertical: 10),
                   child: Center(
                     child: Image.asset(
                       'assets/images/appLogo.png',
@@ -95,62 +89,50 @@ class _SetPasscodeState extends State<SetPasscode> {
                   ),
                 ),
               ),
-              Align(
-                alignment: Alignment.center,
-                child: GetBuilder<PasswordController>(builder: (state) {
-                  return Text(
-                    state.isConfirm ? "Confirm Passcode" : "Set Passcode",
-                    textAlign: TextAlign.center,
-                  );
-                }),
-              ),
-
-              const SizedBox(
-                height: 10,
-              ),
+              GetBuilder<PasswordController>(builder: (state) {
+                return Text(
+                  state.isConfirm ? "Confirm Passcode" : "Set Passcode",
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontWeight: FontWeight.w600,
+                    color: colorScheme.onBackground,
+                  ),
+                );
+              }),
+              const SizedBox(height: 30),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  for (var i = 0; i < 6; i++)
-                    GetBuilder<PasswordController>(builder: (state) {
-                      return Container(
-                        margin: const EdgeInsets.symmetric(
-                          horizontal: 4,
-                          vertical: 2,
-                        ),
-                        height: 40,
-                        width: 40,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                            color: Theme.of(context).primaryColorDark,
+                children: List.generate(6, (i) {
+                  return GetBuilder<PasswordController>(builder: (state) {
+                    bool filled = state.passcode.length >= i + 1;
+                    return Container(
+                      margin: const EdgeInsets.symmetric(
+                          horizontal: 4, vertical: 2),
+                      height: 50,
+                      width: 50,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: colorScheme.primary),
+                      ),
+                      child: Center(
+                        child: Text(
+                          filled ? "•" : "",
+                          style: MyFont().normaltext(
+                            fontsize: 28,
+                            color: filled
+                                ? colorScheme.primary
+                                : colorScheme.onSurface.withOpacity(0.5),
                           ),
                         ),
-                        child: Align(
-                          alignment: Alignment.center,
-                          child: Text(
-                            state.passcode.length >= i + 1 ? "•" : "",
-                            style: MyFont().normaltext(
-                              fontsize: 28,
-                              color: state.passcode.length >= i + 1
-                                  ? Theme.of(context).primaryColor
-                                  : Colors.black54,
-                            ),
-                          ),
-                        ),
-                      );
-                    }),
-                ],
+                      ),
+                    );
+                  });
+                }),
               ),
-              const SizedBox(
-                height: 10,
-              ),
-              // keyboard buttons
+              const SizedBox(height: 10),
               Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 25,
-                  vertical: 25,
-                ),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 25, vertical: 25),
                 child: GetBuilder<PasswordController>(builder: (state) {
                   return GridView.builder(
                     shrinkWrap: true,
@@ -160,35 +142,32 @@ class _SetPasscodeState extends State<SetPasscode> {
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
                       crossAxisSpacing: 0.0,
-                      childAspectRatio: 2,
                       mainAxisSpacing: 10.0,
+                      childAspectRatio: 2,
                     ),
                     itemBuilder: (context, index) {
-                      if (index == 9) {
-                        return const SizedBox();
-                      }
+                      if (index == 9) return const SizedBox();
+
+                      bool isDelete = index == 11;
+                      int number = index == 10 ? 0 : index + 1;
+
                       return GestureDetector(
                         onTap: () {
                           state.setPasscode(index);
                         },
                         child: Container(
                           decoration: BoxDecoration(
-                            border: Border.all(
-                              color: Theme.of(context).primaryColorDark,
-                            ),
+                            border: Border.all(color: colorScheme.primary),
                             shape: BoxShape.circle,
                           ),
-                          child: Align(
-                            alignment: Alignment.center,
-                            child: Text(
-                              index != 11
-                                  ? "${index == 10 ? 0 : index + 1}"
-                                  : "<",
-                              style: MyFont().subtitle(
-                                color:
-                                    index != 11 ? Colors.white : Colors.white,
-                              ),
-                            ),
+                          child: Center(
+                            child: Text(isDelete ? "<" : "$number",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: isDelete
+                                      ? colorScheme.error
+                                      : colorScheme.onBackground,
+                                )),
                           ),
                         ),
                       );

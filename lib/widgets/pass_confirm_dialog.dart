@@ -1,7 +1,7 @@
+import 'package:app_lock_flutter/executables/controllers/apps_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/state_manager.dart';
-import 'package:app_lock_flutter/executables/controllers/apps_controller.dart';
 
 import '../services/constant.dart';
 
@@ -36,7 +36,7 @@ class PasswordCorfirmDialog extends StatelessWidget {
             width: size.width * 0.8,
             height: size.height * 0.2,
             decoration: BoxDecoration(
-              color: Theme.of(context).primaryColorDark,
+              color: Colors.white,
               borderRadius: BorderRadius.circular(10.0),
             ),
             child: Stack(
@@ -46,12 +46,15 @@ class PasswordCorfirmDialog extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
+                      const SizedBox(
+                        height: 10,
+                      ),
                       Text(
                         "Confirm Password",
                         style: MyFont().normaltext(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontweight: FontWeight.w600,
-                          fontsize: 16,
+                          fontsize: 18,
                         ),
                       ),
                       GetBuilder<AppsController>(builder: (state) {
@@ -59,13 +62,12 @@ class PasswordCorfirmDialog extends StatelessWidget {
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(10),
                             border: Border.all(
-                              color: Theme.of(context).primaryColorLight,
+                              color: Colors.blue,
                             ),
                           ),
                           child: TextField(
                             obscureText: true,
                             autofocus: true,
-
                             onChanged: (value) {
                               if (value.length == 6 &&
                                   value == state.getPasscode()) {
@@ -73,7 +75,6 @@ class PasswordCorfirmDialog extends StatelessWidget {
                                   Navigator.pop(context, true);
                                 }
                               } else if (value.length == 6) {
-
                                 // Fluttertoast.showToast(msg: "Invalid password");
                               }
                             },
@@ -81,7 +82,7 @@ class PasswordCorfirmDialog extends StatelessWidget {
                             inputFormatters: <TextInputFormatter>[
                               LengthLimitingTextInputFormatter(6),
                             ],
-                            decoration: InputDecoration(
+                            decoration: const InputDecoration(
                               contentPadding: const EdgeInsets.symmetric(
                                 horizontal: 14,
                                 vertical: 15,
@@ -107,9 +108,6 @@ class PasswordCorfirmDialog extends StatelessWidget {
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: Theme.of(context).primaryColorLight,
-                        ),
                       ),
                       child: IconButton(
                         onPressed: () {
@@ -117,7 +115,7 @@ class PasswordCorfirmDialog extends StatelessWidget {
                         },
                         icon: const Icon(
                           Icons.clear,
-                          color: Colors.white,
+                          color: Colors.red,
                         ),
                       ),
                     ),

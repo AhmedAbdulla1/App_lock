@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:app_lock_flutter/screens/splash.dart';
 import 'package:app_lock_flutter/services/init.dart';
-import 'package:app_lock_flutter/services/themes.dart';
+import 'package:flutter/material.dart';
 
 GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 
@@ -18,7 +17,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       navigatorKey: navigatorKey,
       debugShowCheckedModeBanner: false,
-      theme: CustomTheme.dark,
       home: const SplashPage(),
     );
   }
