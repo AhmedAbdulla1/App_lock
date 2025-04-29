@@ -130,6 +130,17 @@ class AskPermissionBootomSheet extends StatelessWidget {
                                 state.isUsageStatPermissionGiven,
                               ),
                             ),
+                          if (!state.isNotificationPermissionGiven)
+                            GestureDetector(
+                              onTap: () {
+                                state.askNotificationPermission();
+                              },
+                              child: permissionWidget(
+                                context,
+                                "Push notification",
+                                state.isNotificationPermissionGiven,
+                              ),
+                            ),
                         ],
                       ),
                     ),
@@ -137,7 +148,8 @@ class AskPermissionBootomSheet extends StatelessWidget {
                       color: Theme.of(context).primaryColor,
                       onPressed: () async {
                         if (await state.checkOverlayPermission() &&
-                            await state.checkUsageStatePermission() ) {
+                            await state.checkUsageStatePermission() &&
+                            await state.checkNotificationPermission()) {
                           Navigator.pop(context);
                         } else {
                           // Fluttertoast.showToast(
