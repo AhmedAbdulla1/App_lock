@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="CustomKeypad">
+        <attr name="keypadShowDeleteButton" format="boolean" />
+        <attr name="keypadButtonSize" format="dimension" />
+        <attr name="keypadButtonBackgroundDrawable" format="reference" />
+        <attr name="keypadTextColor" format="color" />
+        <attr name="keypadTextSize" format="dimension" />
+    </declare-styleable>
+</resources>
