@@ -1,19 +1,15 @@
 import 'dart:ui';
 
-import 'package:app_lock_flutter/executables/controllers/method_channel_controller.dart';
-import 'package:app_lock_flutter/executables/controllers/password_controller.dart';
-import 'package:app_lock_flutter/widgets/confirmation_dialog.dart';
+import 'package:app_lock_flutter/widgets/home_app_bar.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 import 'package:lottie/lottie.dart';
-import 'package:app_lock_flutter/screens/search.dart';
+
 import '../executables/controllers/apps_controller.dart';
 import '../services/constant.dart';
-import '../widgets/pass_confirm_dialog.dart';
-import 'set_passcode.dart';
 
 class UnlockedAppScreen extends StatelessWidget {
   const UnlockedAppScreen({Key? key}) : super(key: key);
@@ -26,122 +22,7 @@ class UnlockedAppScreen extends StatelessWidget {
         return false;
       },
       child: Scaffold(
-        appBar: AppBar(
-          leading: Padding(
-            padding: const EdgeInsets.all(6.0),
-            child: Container(
-              decoration: BoxDecoration(
-                // color: Theme.of(context).primaryColorDark,
-                borderRadius: BorderRadius.circular(10),
-                // ignore: prefer_const_literals_to_create_immutables
-                border: Border.all(
-                  color: Theme.of(context).primaryColorDark,
-                ),
-              ),
-              child: IconButton(
-                padding: const EdgeInsets.all(0.0),
-                onPressed: () async {
-                  await showGeneralDialog(
-                    barrierColor: Colors.black.withOpacity(0.8),
-                    context: context,
-                    barrierDismissible: false,
-                    barrierLabel: MaterialLocalizations.of(context)
-                        .modalBarrierDismissLabel,
-                    transitionDuration: const Duration(milliseconds: 200),
-                    pageBuilder: (context, animation1, animation2) {
-                      return const ConfirmationDialog(
-                          heading: "Stop",
-                          bodyText: "Sure you want to stop AppLock");
-                    },
-                  ).then((value) {
-                    if (value as bool) {
-                      Get.find<MethodChannelController>().stopForeground();
-                    }
-                  });
-                },
-                icon: Icon(
-                  Icons.disabled_by_default_rounded,
-                  color: Theme.of(context).primaryColor,
-                ),
-              ),
-            ),
-          ),
-          centerTitle: true,
-          title: Text(
-            "AppLock",
-          ),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  // color: Theme.of(context).primaryColorDark,
-                  borderRadius: BorderRadius.circular(10),
-                  // ignore: prefer_const_literals_to_create_immutables
-                  border: Border.all(
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    if (Get.find<PasswordController>()
-                        .prefs
-                        .containsKey(AppConstants.setPassCode)) {
-                      showComfirmPasswordDialog(context).then((value) {
-                        if (value as bool) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => const SetPasscode(),
-                            ),
-                          );
-                        }
-                      });
-                    } else {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SetPasscode(),
-                        ),
-                      );
-                    }
-                  },
-                  icon: Icon(
-                    Icons.key,
-                    color: Theme.of(context).primaryColor,
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(6.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(
-                    color: Theme.of(context).primaryColorDark,
-                  ),
-                ),
-                child: IconButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (BuildContext context) {
-                          return const SearchPage();
-                        },
-                      ),
-                    );
-                  },
-                  icon: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
+        appBar: const HomeAppBar(),
         body: Stack(
           children: [
             SizedBox(
@@ -177,7 +58,7 @@ class UnlockedAppScreen extends StatelessWidget {
                       return await appsController.getAppsData();
                     },
                     child: ListView.builder(
-                      padding: EdgeInsets.zero,
+                      padding: const EdgeInsets.only(top: 20),
                       itemCount: appsController.unLockList.length,
                       itemBuilder: (context, index) {
                         Application app = appsController.unLockList[index];
@@ -189,9 +70,6 @@ class UnlockedAppScreen extends StatelessWidget {
                           child: Container(
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: Theme.of(context).primaryColorDark,
-                              ),
                             ),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -209,13 +87,6 @@ class UnlockedAppScreen extends StatelessWidget {
                                     // color: Theme.of(context).primaryColorDark,
                                     borderRadius: BorderRadius.circular(10),
                                     // ignore: prefer_const_literals_to_create_immutables
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: Colors.black.withOpacity(0.25),
-                                        blurRadius: 20.0,
-                                        offset: const Offset(5, 5),
-                                      ),
-                                    ],
                                   ),
                                   child: app is ApplicationWithIcon
                                       ? CircleAvatar(
@@ -242,11 +113,10 @@ class UnlockedAppScreen extends StatelessWidget {
                                     children: [
                                       Text(
                                         app.appName,
-
-                                      ),
-                                      Text(
-                                        "${app.versionName}",
-
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
                                     ],
                                   ),
@@ -266,8 +136,7 @@ class UnlockedAppScreen extends StatelessWidget {
                                         toggleColor: Colors.white,
                                         activeColor:
                                             Theme.of(context).primaryColor,
-                                        inactiveColor:
-                                            Theme.of(context).primaryColorDark,
+                                        inactiveColor: Colors.grey,
                                         toggleSize: 20.0,
                                         value: appsController.selectLockList
                                             .contains(app.appName),
@@ -275,16 +144,10 @@ class UnlockedAppScreen extends StatelessWidget {
                                         padding: 2.0,
                                         showOnOff: false,
                                         onToggle: (val) {
-
-                                            appsController.addToLockedApps(
-                                              app,
-                                              context,
-                                            );
-                                          // } else {
-                                          //   print('ahmed');
-                                          //   // Fluttertoast.showToast(
-                                          //   //     msg: "Set password");
-                                          // }
+                                          appsController.addToLockedApps(
+                                            app,
+                                            context,
+                                          );
                                         },
                                       ),
                                     );

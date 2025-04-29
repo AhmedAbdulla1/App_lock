@@ -5,7 +5,6 @@ import 'package:get/instance_manager.dart';
 import 'package:get/state_manager.dart';
 
 import '../executables/controllers/apps_controller.dart';
-import '../services/constant.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -26,22 +25,16 @@ class _SearchPageState extends State<SearchPage> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        iconTheme: const IconThemeData(
-          color: Colors.white,
-        ),
+        iconTheme: const IconThemeData(),
         leading: Padding(
           padding: const EdgeInsets.all(6.0),
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(10),
-              border: Border.all(
-                color: Theme.of(context).primaryColorDark,
-              ),
             ),
             child: IconButton(
               icon: const Icon(
-                Icons.keyboard_arrow_left,
-                color: Colors.white,
+                Icons.arrow_back_ios,
               ),
               onPressed: () {
                 Navigator.pop(context);
@@ -49,7 +42,7 @@ class _SearchPageState extends State<SearchPage> {
             ),
           ),
         ),
-        title: Text(
+        title: const Text(
           "Search App",
         ),
       ),
@@ -74,19 +67,18 @@ class _SearchPageState extends State<SearchPage> {
                   onChanged: (value) {
                     state.appSearch();
                   },
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(
                       horizontal: 14,
                       vertical: 14,
                     ),
                     isCollapsed: true,
-                    filled: true,
                     hintText: 'Search apps',
                     prefixIcon: const Padding(
                       padding: EdgeInsets.all(12),
                       child: Icon(
                         Icons.search,
-                        color: Colors.white,
+                        color: Colors.black,
                       ),
                     ),
                     border: InputBorder.none,
@@ -94,13 +86,6 @@ class _SearchPageState extends State<SearchPage> {
                 ),
               );
             }),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: MySeparator(
-              color: Theme.of(context).primaryColor,
-              dashWidthget: 3.0,
-            ),
           ),
           Expanded(
             child: GetBuilder<AppsController>(
@@ -155,7 +140,6 @@ class _SearchPageState extends State<SearchPage> {
                                     Text(
                                       state.searchedApps[index].application!
                                           .versionName,
-
                                     ),
                                   ],
                                 ),
